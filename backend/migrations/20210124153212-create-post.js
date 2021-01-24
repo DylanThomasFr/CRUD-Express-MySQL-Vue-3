@@ -8,11 +8,21 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.INTEGER
       },
+      uuid: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
+      },
       title: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull:  false
       },
       content: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull:  false
+      },
+      author: {
+        type: DataTypes.INTEGER,
+        allowNull:false
       },
       createdAt: {
         allowNull: false,
