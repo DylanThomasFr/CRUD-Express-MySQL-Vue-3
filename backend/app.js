@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path')
 require('dotenv').config({path: path.resolve('.env')})
 
+
 // Database
 const db = require('./config/database')
 db.authenticate()

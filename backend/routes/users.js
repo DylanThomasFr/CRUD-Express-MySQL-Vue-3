@@ -5,7 +5,7 @@ const User = require('../models/User')
 
 router.get('/', (request, response) =>
     User.findAll()
-        .then(posts => response.send(200))
+        .then(users => response.send(200))
         .catch(error => console.log(error))
 )
 
