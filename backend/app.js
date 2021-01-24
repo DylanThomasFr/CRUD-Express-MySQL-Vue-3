@@ -19,5 +19,6 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/posts', require('./routes/posts'))
+app.use('/users', require('./routes/users'))
 
 app.listen(PORT, console.log(`Running on port : ${PORT}`));

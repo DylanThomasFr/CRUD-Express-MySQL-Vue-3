@@ -1,27 +1,27 @@
-const Sequelize= require('sequelize')
+const {Sequelize, DataTypes}= require('sequelize')
 const db = require('../config/database')
-const Post = require('Post')
+const Post = require('../models/Post')
 
-const User = db.define('User', {
+const User = db.define('User',{
     id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
     username: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     password: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     first_name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     last_name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     created_at: {
@@ -33,7 +33,10 @@ const User = db.define('User', {
         type: 'TIMESTAMP',
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         allowNull: false
-    },
+    }
+}, {
+    tableName: 'users',
+    freezeTableName: true
 })
 
 User.hasMany(Post)
