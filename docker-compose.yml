@@ -5,58 +5,54 @@ networks:
 
 services:
   mysql:
-    image: mysql:8
-    restart: unless-stopped
-    container_name: crud-mysql
+    image: mysql:${MYSQL_VERSION}
     ports:
-      - "3306:3306"
+      - ${MYSQL_HOST_PORT}:3306
     environment:
-      MYSQL_DATABASE: default
-      MYSQL_USER: default
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - ~/.docker-database/express-mysql:/var/lib/mysql
+      - ${BACKEND_DATA}/express-mysql:/var/lib/mysql
     networks:
       - crud
 
   phpmyadmin:
     image: phpmyadmin
-    restart: always
-    container_name: crud-phpmyadmin
     ports:
-      - 8080:80
+      - ${PMA_PORT}:80
     environment:
       PMA_HOST: mysql
+      PMA_PORT: 3306
       PMA_USER: root
-      PMA_PASSWORD: secret
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       - mysql
     networks:
       - crud
 
   vue:
-    build:
-      context: .
-      dockerfile: frontend/vue.Dockerfile
-    container_name: crud-vue
+    image: node:${VUE_NODE_VERSION}
+    command: "bash ./setup.sh"
+    working_dir: /usr/src/app
     ports:
-      - 80:8080
+      - ${VUE_HOST_PORT}:8080
     volumes:
-    - ./frontend:/usr/src/app
+    - ${FRONTEND_PATH}:/usr/src/app
     networks:
       - crud
 
   express:
-    build:
-      context: .
-      dockerfile: backend/express.Dockerfile
-    container_name: crud-express
+    image: node:${EXPRESS_NODE_VERSION}
+    command: "bash ./setup.sh"
+    working_dir: /usr/src/app
+    env_file: ${BACKEND_PATH}/.env
     depends_on:
       - mysql
     volumes:
-    - ./backend:/usr/src/app
+    - ${BACKEND_PATH}:/usr/src/app
     ports:
-      - 3000:3000
+      - ${EXPRESS_HOST_PORT}:3000
     networks:
       - crud
