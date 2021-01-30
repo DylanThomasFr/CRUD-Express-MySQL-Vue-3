@@ -1,23 +1,17 @@
 const express = require('express')
-const { sequelize, User } = require('./models')
+const { sequelize, User } = require('./api/models')
+const bodyParser = require ('body-parser');
+
 
 const app = express()
 app.use(express.json())
 
-app.post('/users', async(request, response) => {
-    const {username, password, email, firstName, lastName, role} = request.body
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
-    try {
-        const user = await User.create({username, password, email, firstName, lastName, role})
+const port = process.env.port || 3000
 
-        return response.json(user)
-    } catch(err) {
-        console.log(err)
-        return response.status(500).json(err)
-    }
-})
-
-app.listen({ port : 3000 }, async () => {
+app.listen(port, async () => {
     console.log('Server up !')
     await sequelize.authenticate();
     console.log('Database connected !')
