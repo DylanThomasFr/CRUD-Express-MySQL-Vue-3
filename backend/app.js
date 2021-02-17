@@ -1,6 +1,7 @@
 const express = require('express')
 const { sequelize, User } = require('./api/models')
-const bodyParser = require ('body-parser');
+const bodyParser = require ('body-parser')
+const authRoute = require('./routes/auth')
 
 
 const app = express()
@@ -8,6 +9,8 @@ app.use(express.json())
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+
+app.use('/api/user', authRoute)
 
 const port = process.env.port || 3000
 

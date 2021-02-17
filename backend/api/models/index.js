@@ -7,16 +7,11 @@ const configJson = require('../../config/config')
 const basename = path.basename(__filename)
 const env = process.env.NODE_ENV ?? 'development'
 
-const config = configJson[env];
+const config = configJson[env]
 
-console.log('this is the environment: ', env)
+const db = {}
 
-const db = {};
-
-console.log(config)
-
-
-let sequelize;
+let sequelize
 if (config.environment === 'production') {
   sequelize = new Sequelize(
       process.env[config.use_env_variable], config
@@ -27,7 +22,7 @@ if (config.environment === 'production') {
       process.env.DB_PASSWORD, {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
-        dialect: 'postgres',
+        dialect: 'mysql',
         dialectOption: {
           ssl: true,
           native: true

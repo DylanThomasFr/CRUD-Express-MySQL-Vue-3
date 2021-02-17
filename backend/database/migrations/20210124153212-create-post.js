@@ -22,7 +22,8 @@ module.exports = {
       },
       author: {
         type: DataTypes.INTEGER,
-        allowNull:false
+        allowNull:false,
+        references: { model: 'users', key: 'id'}
       },
       createdAt: {
         allowNull: false,

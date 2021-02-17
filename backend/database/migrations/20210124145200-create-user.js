@@ -34,7 +34,7 @@ module.exports = {
       },
       role: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: DataTypes.INTEGER
       },
       createdAt: {
         allowNull: false,
