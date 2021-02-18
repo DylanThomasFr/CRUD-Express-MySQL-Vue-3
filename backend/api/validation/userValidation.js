@@ -1,6 +1,5 @@
 const Joi = require('joi')
 
-// REGISTER VALIDATION
 const registerValidation = data => {
     const skeleton = Joi.object({
         username : Joi.string().required(),
@@ -13,7 +12,6 @@ const registerValidation = data => {
     return skeleton.validate(data)
 }
 
-// LOGIN VALIDATION
 const loginValidation = data => {
     const skeleton = Joi.object({
         username : Joi.string().required(),

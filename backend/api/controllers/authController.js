@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const {User} = require('../models');
 const {registerValidation, loginValidation} = require('../validation/userValidation')
 const jwtTokenUtils = require('../../utils/jwtTokenUtils');
@@ -35,7 +34,7 @@ exports.register = async (request, response) => {
                     .catch(error => response.status(500).json(error))
             })
         } else {
-            response.status(409).json({ error: user })
+            response.status(409).json('User with this informations already exists !')
         }
     }).catch(error => response.status(500).json({ error: error }))
 };
@@ -61,7 +60,7 @@ exports.login = (request, response) => {
                             role: user.role
                         })
                     } else {
-                        response.status(403).json({ error: 'invalid password' });
+                        response.status(403).json({ error: 'Invalid password' });
                     };
                 })
             } else {
