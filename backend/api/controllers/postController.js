@@ -27,11 +27,11 @@ exports.addPost = async (request, response) => {
         try {
             const savedPost = await post.save()
             response.status(201).json(savedPost)
-        } catch (err) {
-            response.status(400).json({ message: err })
+        } catch (error) {
+            response.status(400).json({ error: error.details[0].message })
         }
     } else {
-        response.status(401).send({ message: 'You don\'t have the right to create a new post' })
+        response.status(401).send({ error: 'You don\'t have the right to create a new post' })
     }
 };
 
@@ -45,8 +45,7 @@ exports.allPosts = async (request, response) => {
         })
         response.status(200).json(posts)
     } catch (error) {
-        console.log(error)
-        response.status(400).json({ message: error })
+        response.status(400).json({ error: error.details[0].message })
     }
 };
 
@@ -64,8 +63,7 @@ exports.getPost = async (request, response) => {
         })
         response.status(200).json(post)
     } catch (error) {
-        console.log(error)
-        response.status(400).json({ message: error })
+        response.status(400).json({ error: error.details[0].message })
     }
 };
 

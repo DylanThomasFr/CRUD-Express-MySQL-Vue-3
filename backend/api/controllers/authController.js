@@ -21,7 +21,7 @@ exports.register = async (request, response) => {
         }
     }).then(user => {
         if (!user) {
-            bcrypt.hash(request.body.password, salt, function (err, bcryptPassword) {
+            bcrypt.hash(request.body.password, salt, function (error, bcryptPassword) {
                 User.create({
                     email: request.body.email,
                     username: request.body.username,
@@ -36,7 +36,7 @@ exports.register = async (request, response) => {
         } else {
             response.status(409).json('User with this informations already exists !')
         }
-    }).catch(error => response.status(500).json({ error: error }))
+    }).catch(error => response.status(500).json({ error: error.details[0].message }))
 };
 
 exports.login = (request, response) => {
@@ -60,12 +60,12 @@ exports.login = (request, response) => {
                             role: user.role
                         })
                     } else {
-                        response.status(403).json({ error: 'Invalid password' });
+                        response.status(403).json({ error: errComparePassword});
                     };
                 })
             } else {
-                response.status(404).json({ 'erreur': 'This user doesn\'t  exist' });
+                response.status(404).json({ error: 'This user doesn\'t  exist' });
             }
         })
-        .catch(error => { response.status(500).json({ error }) })
+        .catch(error => { response.status(500).json({ error: error.details[0].message }) })
 };
