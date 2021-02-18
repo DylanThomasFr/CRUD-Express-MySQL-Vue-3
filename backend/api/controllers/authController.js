@@ -40,32 +40,33 @@ exports.register = async (request, response) => {
     }).catch(error => response.status(500).json({ error: error }))
 };
 
-exports.login = (req, res) => {
-    let email = req.body.email;
-    let password = req.body.password;
-    if (email == null || password == null) {
-        res.status(400).json({ error: 'Il manque une information' })
-    }
+exports.login = (request, response) => {
+    const {error} = loginValidation(request.query)
+    if(error) return response.status(422).send(error.details[0].message)
 
-
-    models.User.findOne({
-        where: { email: email }
+    User.findOne({
+        where: {
+            [Op.or] : [
+                {email: request.query.username},
+                {username : request.query.username}
+            ]
+        }
     }).then(user => {
             if (user) {
-                bcrypt.compare(password, user.password, (errComparePassword, resComparePassword) => {
+                bcrypt.compare(request.query.password, user.password, (errComparePassword, resComparePassword) => {
                     if (resComparePassword) {
-                        res.status(200).json({
+                        response.status(200).json({
                             userId: user.id,
                             token: jwtTokenUtils.generateToken(user),
-                            isAdmin: user.isAdmin
+                            role: user.role
                         })
                     } else {
-                        res.status(403).json({ error: 'invalid password' });
+                        response.status(403).json({ error: 'invalid password' });
                     };
                 })
             } else {
-                res.status(404).json({ 'erreur': 'Cet utilisateur n\'existe pas' })
+                response.status(404).json({ 'erreur': 'This user doesn\'t  exist' });
             }
         })
-        .catch(err => { res.status(500).json({ err }) })
+        .catch(error => { response.status(500).json({ error }) })
 };
